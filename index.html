@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Connections ♡</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      background: linear-gradient(
+        135deg,
+        #fff7fb,
+        #f8f4ff,
+        #f5fbff
+      );
+
+      color: #333;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 40px 15px;
+
+      overflow-x: hidden;
+    }
+
+
+    /* =========================
+       FLOATING BACKGROUND DECORATIONS
+    ========================= */
+
+    .decoration {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.7;
+
+      animation: floating 5s ease-in-out infinite;
+    }
+
+    .sparkle {
+      font-size: 25px;
+    }
+
+    .cat {
+      font-size: 28px;
+    }
+
+    .d1 {
+      top: 7%;
+      left: 7%;
+    }
+
+    .d2 {
+      top: 16%;
+      right: 8%;
+      animation-delay: 1s;
+    }
+
+    .d3 {
+      bottom: 10%;
+      left: 8%;
+      animation-delay: 2s;
+    }
+
+    .d4 {
+      bottom: 16%;
+      right: 7%;
+      animation-delay: 3s;
+    }
+
+    .d5 {
+      top: 45%;
+      left: 3%;
+      animation-delay: 1.5s;
+    }
+
+    .d6 {
+      top: 55%;
+      right: 4%;
+      animation-delay: 2.5s;
+    }
+
+    @keyframes floating {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-15px) rotate(8deg);
+      }
+    }
+
+
+    /* =========================
+       MAIN GAME
+    ========================= */
+
+    .game-container {
+      width: 100%;
+      max-width: 720px;
+
+      text-align: center;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 42px;
+
+      margin: 0 0 8px;
+
+      animation: titleAppear 0.8s ease;
+    }
+
+    @keyframes titleAppear {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #666;
+
+      margin-bottom: 28px;
+    }
+
+
+    /* =========================
+       WORD GRID
+    ========================= */
+
+    .grid {
+      display: grid;
+
+      grid-template-columns: repeat(4, 1fr);
+
+      gap: 10px;
+
+      margin-bottom: 20px;
+    }
+
+    .word {
+      background: rgba(255,255,255,0.8);
+
+      border-radius: 10px;
+
+      min-height: 75px;
+
+      padding: 10px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+      font-size: 14px;
+
+      text-align: center;
+
+      user-select: none;
+
+      box-shadow:
+        0 3px 10px
+        rgba(0,0,0,0.05);
+
+      transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+      animation: tileAppear 0.4s ease both;
+    }
+
+    @keyframes tileAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .word:hover {
+      transform:
+        translateY(-3px)
+        scale(1.02);
+
+      box-shadow:
+        0 7px 18px
+        rgba(0,0,0,0.09);
+    }
+
+    .word.selected {
+      background: #5a4b8a;
+      color: white;
+
+      transform: scale(0.97);
+    }
+
+
+    /* WRONG ANSWER SHAKE */
+
+    .word.shake {
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-8px);
+      }
+
+      40% {
+        transform: translateX(8px);
+      }
+
+      60% {
+        transform: translateX(-6px);
+      }
+
+      80% {
+        transform: translateX(6px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+
+    /* =========================
+       SOLVED GROUPS
+    ========================= */
+
+    .solved-group {
+      border-radius: 10px;
+
+      padding: 18px;
+
+      margin-bottom: 10px;
+
+      font-weight: bold;
+
+      opacity: 1;
+
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+
+      animation: solvedAppear 0.5s ease;
+    }
+
+    @keyframes solvedAppear {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .category {
+      font-size: 18px;
+      margin-bottom: 7px;
+    }
+
+    .words {
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+
+    /* CATEGORY COLOURS */
+
+    .category-0 {
+      background: #f6d6e5;
+    }
+
+    .category-1 {
+      background: #d8e8f7;
+    }
+
+    .category-2 {
+      background: #dff0d8;
+    }
+
+    .category-3 {
+      background: #f9e7b8;
+    }
+
+
+    /* =========================
+       FINAL TRANSITION
+    ========================= */
+
+    .fade-away {
+      opacity: 0;
+
+      transform:
+        scale(0.8)
+        translateY(-10px);
+    }
+
+    .birthday-reveal {
+      animation:
+        birthdayPop
+        0.75s
+        cubic-bezier(
+          .175,
+          .885,
+          .32,
+          1.275
+        )
+        both;
+    }
+
+    @keyframes birthdayPop {
+      0% {
+        opacity: 0;
+
+        transform:
+          scale(0.2)
+          rotate(-5deg);
+      }
+
+      60% {
+        opacity: 1;
+
+        transform:
+          scale(1.12)
+          rotate(3deg);
+      }
+
+      100% {
+        opacity: 1;
+
+        transform:
+          scale(1)
+          rotate(0deg);
+      }
+    }
+
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .buttons {
+      display: flex;
+
+      justify-content: center;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+
+      padding: 13px 22px;
+
+      border-radius: 30px;
+
+      cursor: pointer;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      background: #e9e6ee;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform:
+        translateY(-2px)
+        scale(1.03);
+
+      box-shadow:
+        0 5px 12px
+        rgba(0,0,0,0.1);
+    }
+
+    #submit {
+      background: #5a4b8a;
+      color: white;
+    }
+
+
+    /* =========================
+       CELEBRATION BURST
+    ========================= */
+
+    .celebration {
+      position: fixed;
+
+      left: 50%;
+      top: 50%;
+
+      pointer-events: none;
+
+      z-index: 100;
+
+      font-size: 28px;
+
+      animation:
+        celebrate
+        1.8s
+        ease-out
+        forwards;
+    }
+
+    @keyframes celebrate {
+      0% {
+        opacity: 0;
+
+        transform:
+          translate(0, 0)
+          scale(0.2)
+          rotate(0deg);
+      }
+
+      15% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+
+        transform:
+          translate(
+            var(--x),
+            var(--y)
+          )
+          scale(1.3)
+          rotate(360deg);
+      }
+    }
+
+
+    /* =========================
+       FINAL MESSAGE
+    ========================= */
+
+    .final-message {
+      display: none;
+
+      margin-top: 28px;
+
+      padding: 30px 20px;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,0.85);
+
+      box-shadow:
+        0 8px 30px
+        rgba(0,0,0,0.08);
+
+      animation:
+        finalAppear
+        1s
+        ease
+        both;
+    }
+
+    @keyframes finalAppear {
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(30px)
+          scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+    .final-message h2 {
+      font-size: 36px;
+      margin: 0;
+    }
+
+    .final-message p {
+      font-size: 18px;
+
+      line-height: 1.5;
+
+      margin-top: 18px;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+      body {
+        padding: 25px 10px;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+      }
+
+      .grid {
+        gap: 7px;
+      }
+
+      .word {
+        min-height: 68px;
+
+        font-size: 11px;
+
+        padding: 6px;
+      }
+
+      .category {
+        font-size: 16px;
+      }
+
+      .words {
+        font-size: 12px;
+      }
+
+      .final-message h2 {
+        font-size: 29px;
+      }
+
+      .final-message p {
+        font-size: 16px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- FLOATING SPARKLES + CATS -->
+
+  <div class="decoration sparkle d1">✦</div>
+  <div class="decoration sparkle d2">✧</div>
+  <div class="decoration sparkle d3">⋆</div>
+  <div class="decoration sparkle d4">✦</div>
+
+  <div class="decoration cat d5">🐈</div>
+  <div class="decoration cat d6">🐱</div>
+
+
+  <!-- MAIN GAME -->
+
+  <div class="game-container">
+
+    <h1>Connections 🧩</h1>
+
+    <div class="subtitle">
+      Find four groups of four!
+    </div>
+
+
+    <!-- SOLVED GROUPS -->
+
+    <div id="solved"></div>
+
+
+    <!-- WORD GRID -->
+
+    <div
+      class="grid"
+      id="grid">
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+      <button onclick="shuffleWords()">
+        Shuffle
+      </button>
+
+      <button onclick="deselectAll()">
+        Deselect All
+      </button>
+
+      <button
+        id="submit"
+        onclick="submitGuess()">
+        Submit
+      </button>
+
+    </div>
+
+
+    <!-- FINAL BIRTHDAY MESSAGE -->
+
+    <div
+      class="final-message"
+      id="finalMessage">
+
+      <h2>
+        HAPPY BIRTHDAY TUNA!!! 🎂
+      </h2>
+
+      <p>
+        ILYYYYY &lt;3333
+
+        <br><br>
+
+        hope 18 treats u well 🥹🫶✨
+
+        <br>
+
+        heppy birthday to my favourite
+        smarty pants 💌🐱
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+
+    /* =========================
+       YOUR FOUR GROUPS
+    ========================= */
+
+    const groups = [
+
+      {
+        name: "songs <3",
+
+        words: [
+          "BAGS",
+          "CIDER",
+          "TYIG",
+          "HEAVY"
+        ]
+      },
+
+
+      {
+        name:
+          "mOmeAnts (there are too many i couldn't put all 💔)",
+
+        words: [
+          "ENVELOPE",
+          "PEDAL",
+          "ESCAPE",
+          "BOWL"
+        ]
+      },
+
+
+      {
+        name: "nomnomnom",
+
+        words: [
+          "SUSHI",
+          "SALTED CARAMEL COOKIE DOUGH",
+          "TRUFFLE",
+          "FARERRO ROCHER SHAKE"
+        ]
+      },
+
+
+      {
+        name: "you are ___",
+
+        words: [
+          "EIGHTEEN",
+          "SUNDAR",
+          "HEPPY",
+          "SMARTY PANTS"
+        ]
+      }
+
+    ];
+
+
+    /* =========================
+       GAME VARIABLES
+    ========================= */
+
+    let selected = [];
+
+    let solvedGroups = [];
+
+    let words = [];
+
+
+    /* CREATE WORD LIST */
+
+    groups.forEach((group, groupIndex) => {
+
+      group.words.forEach(word => {
+
+        words.push({
+          text: word,
+          group: groupIndex
+        });
+
+      });
+
+    });
+
+
+    /* SHUFFLE WHEN PAGE LOADS */
+
+    words.sort(() => Math.random() - 0.5);
+
+
+    /* =========================
+       DISPLAY WORDS
+    ========================= */
+
+    function renderWords() {
+
+      const grid =
+        document.getElementById("grid");
+
+      grid.innerHTML = "";
+
+
+      words.forEach((word, index) => {
+
+        if (
+          solvedGroups.includes(word.group)
+        ) {
+          return;
+        }
+
+
+        const div =
+          document.createElement("div");
+
+
+        div.className = "word";
+
+        div.textContent =
+          word.text;
+
+
+        if (
+          selected.includes(index)
+        ) {
+          div.classList.add("selected");
+        }
+
+
+        div.onclick =
+          () => selectWord(index, div);
+
+
+        grid.appendChild(div);
+
+      });
+
+    }
+
+
+    /* =========================
+       SELECT WORD
+    ========================= */
+
+    function selectWord(index, element) {
+
+      if (
+        selected.includes(index)
+      ) {
+
+        selected =
+          selected.filter(
+            i => i !== index
+          );
+
+        element.classList.remove(
+          "selected"
+        );
+
+        return;
+      }
+
+
+      if (
+        selected.length >= 4
+      ) {
+        return;
+      }
+
+
+      selected.push(index);
+
+      element.classList.add(
+        "selected"
+      );
+
+    }
+
+
+    /* =========================
+       DESELECT ALL
+    ========================= */
+
+    function deselectAll() {
+
+      selected = [];
+
+      renderWords();
+
+    }
+
+
+    /* =========================
+       SUBMIT ANSWER
+    ========================= */
+
+    function submitGuess() {
+
+      if (
+        selected.length !== 4
+      ) {
+
+        alert(
+          "Pick four words first!! 😭"
+        );
+
+        return;
+      }
+
+
+      const selectedWords =
+        selected.map(
+          i => words[i]
+        );
+
+
+      const groupNumber =
+        selectedWords[0].group;
+
+
+      const correct =
+        selectedWords.every(
+          word =>
+            word.group ===
+            groupNumber
+        );
+
+
+      /* CORRECT */
+
+      if (correct) {
+
+        solvedGroups.push(
+          groupNumber
+        );
+
+
+        showSolvedGroup(
+          groupNumber
+        );
+
+
+        selected = [];
+
+
+        renderWords();
+
+
+        /* ALL FOUR SOLVED */
+
+        if (
+          solvedGroups.length === 4
+        ) {
+
+          setTimeout(
+            showFinalMessage,
+            500
+          );
+
+        }
+
+      }
+
+
+      /* WRONG */
+
+      else {
+
+        const tiles =
+          document.querySelectorAll(
+            ".word"
+          );
+
+
+        tiles.forEach(tile => {
+
+          tile.classList.add(
+            "shake"
+          );
+
+
+          setTimeout(() => {
+
+            tile.classList.remove(
+              "shake"
+            );
+
+          }, 400);
+
+        });
+
+
+        selected = [];
+
+
+        setTimeout(
+          renderWords,
+          400
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       SHOW SOLVED CATEGORY
+    ========================= */
+
+    function showSolvedGroup(
+      groupNumber
+    ) {
+
+      const group =
+        groups[groupNumber];
+
+
+      const solved =
+        document.getElementById(
+          "solved"
+        );
+
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.className =
+        "solved-group category-" +
+        groupNumber;
+
+
+      div.innerHTML = `
+
+        <div class="category">
+          ${group.name}
+        </div>
+
+        <div class="words">
+          ${group.words.join(" · ")}
+        </div>
+
+      `;
+
+
+      solved.appendChild(div);
+
+    }
+
+
+    /* =========================
+       SHUFFLE
+    ========================= */
+
+    function shuffleWords() {
+
+      if (
+        selected.length > 0
+      ) {
+        return;
+      }
+
+
+      const unsolvedWords =
+        words.filter(
+          word =>
+            !solvedGroups.includes(
+              word.group
+            )
+        );
+
+
+      unsolvedWords.sort(
+        () => Math.random() - 0.5
+      );
+
+
+      let index = 0;
+
+
+      words =
+        words.map(word => {
+
+          if (
+            !solvedGroups.includes(
+              word.group
+            )
+          ) {
+
+            return unsolvedWords[
+              index++
+            ];
+
+          }
+
+          return word;
+
+        });
+
+
+      renderWords();
+
+    }
+
+
+    /* =========================
+       FINAL BIRTHDAY REVEAL
+    ========================= */
+
+    function showFinalMessage() {
+
+      const solvedBoxes =
+        document.querySelectorAll(
+          ".solved-group"
+        );
+
+
+      const birthdayWords = [
+
+        "HAPPY 🎂",
+
+        "BIRTHDAY 🥳",
+
+        "TUNA 🫶",
+
+        "ILY 💌"
+
+      ];
+
+
+      /* FIRST:
+         ALL CATEGORY NAMES FADE AWAY */
+
+      solvedBoxes.forEach(box => {
+
+        box.classList.add(
+          "fade-away"
+        );
+
+      });
+
+
+      /* CELEBRATION BURST */
+
+      setTimeout(
+        createCelebration,
+        550
+      );
+
+
+      /* THEN:
+         HAPPY → BIRTHDAY → TUNA → ILY
+         POPS IN ONE BY ONE */
+
+      setTimeout(() => {
+
+        solvedBoxes.forEach(
+          (box, index) => {
+
+            box.querySelector(
+              ".category"
+            ).textContent =
+              birthdayWords[index];
+
+
+            box.querySelector(
+              ".words"
+            ).style.display =
+              "none";
+
+
+            box.classList.remove(
+              "fade-away"
+            );
+
+
+            box.classList.add(
+              "birthday-reveal"
+            );
+
+
+            box.style.animationDelay =
+              (index * 0.4) + "s";
+
+          }
+        );
+
+      }, 950);
+
+
+      /* FINAL MESSAGE APPEARS */
+
+      setTimeout(() => {
+
+        document.getElementById(
+          "finalMessage"
+        ).style.display =
+          "block";
+
+
+        document.querySelector(
+          ".buttons"
+        ).style.display =
+          "none";
+
+      }, 3000);
+
+    }
+
+
+    /* =========================
+       CELEBRATION SPARKLE BURST
+    ========================= */
+
+    function createCelebration() {
+
+      const things = [
+
+        "✨",
+        "✦",
+        "✧",
+        "🎉",
+        "💖",
+        "🫶",
+        "🐱",
+        "🐈",
+        "🎂",
+        "💌"
+
+      ];
+
+
+      for (
+        let i = 0;
+        i < 45;
+        i++
+      ) {
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+
+        item.className =
+          "celebration";
+
+
+        item.textContent =
+          things[
+            Math.floor(
+              Math.random() *
+              things.length
+            )
+          ];
+
+
+        const x =
+          (
+            Math.random() - 0.5
+          )
+          *
+          window.innerWidth;
+
+
+        const y =
+          (
+            Math.random() - 0.5
+          )
+          *
+          window.innerHeight;
+
+
+        item.style.setProperty(
+          "--x",
+          x + "px"
+        );
+
+
+        item.style.setProperty(
+          "--y",
+          y + "px"
+        );
+
+
+        document.body.appendChild(
+          item
+        );
+
+
+        setTimeout(() => {
+
+          item.remove();
+
+        }, 1800);
+
+      }
+
+    }
+
+
+    /* =========================
+       START THE GAME
+    ========================= */
+
+    renderWords();
+
+  </script>
+
+</body>
+</html>
